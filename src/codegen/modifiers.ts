@@ -1,6 +1,7 @@
+import { Properties, transform } from './transform';
+
 import { Modifier } from '../types/modifiers';
 import { Type } from '../types/types';
-import { transform } from './transform';
 
 // TODO: less shitty way of doing this
 export const modifier = <T extends Type>(
@@ -27,7 +28,9 @@ export const modifier = <T extends Type>(
   switch (modifier.type) {
     case 'default':
       return `@default(${
-        type == 'Enum' ? modifier.value : transform(modifier.value)
+        type == 'Enum'
+          ? modifier.value
+          : transform(modifier.value as Properties[string])
       })`;
     case 'id':
       return `@id`;

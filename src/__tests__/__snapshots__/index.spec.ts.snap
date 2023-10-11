@@ -13,7 +13,7 @@ exports[`zen-stack-ts enum block generation should generate an enum 1`] = `
 	Qux
 	// This is a comment
 	Foo
-	Bar @map(\\"Baz\\")
+	Bar @map("Baz")
 }"
 `;
 
@@ -23,7 +23,7 @@ enum Example {
 	Qux
 	// This is a comment
 	Foo
-	Bar @map(\\"Baz\\")
+	Bar @map("Baz")
 }"
 `;
 
@@ -32,18 +32,18 @@ exports[`zen-stack-ts should generate the schema 1`] = `
 // datasource ----------------------------------------------------------------------
 
 datasource db {
-	url                   = env(\\"DATABASE_URL\\")
-	provider              = \\"mysql\\"
-	shadowDatabaseUrl     = env(\\"DATABASE_SHADOW_URL\\")
-	referentialIntegrity  = \\"prisma\\"
+	url                   = env("DATABASE_URL")
+	provider              = "mysql"
+	shadowDatabaseUrl     = env("DATABASE_SHADOW_URL")
+	referentialIntegrity  = "prisma"
 }
 
 // generators ----------------------------------------------------------------------
 
 generator client {
-	provider         = \\"prisma-client-js\\"
-	binaryTargets    = [\\"native\\",\\"rhel-openssl-1.0.x\\",\\"linux-arm64-openssl-1.0.x\\",\\"darwin-arm64\\"]
-	previewFeatures  = [\\"referentialIntegrity\\"]
+	provider         = "prisma-client-js"
+	binaryTargets    = ["native","rhel-openssl-1.0.x","linux-arm64-openssl-1.0.x","darwin-arm64"]
+	previewFeatures  = ["referentialIntegrity"]
 }
 
 // enums ---------------------------------------------------------------------------
@@ -51,10 +51,10 @@ generator client {
 // This is the Role Enum
 enum Role {
 	// This is the admin role
-	ADMIN @map(\\"admin\\")
-	USER @map(\\"user\\")
+	ADMIN @map("admin")
+	USER @map("user")
 	// This is the owner role
-	OWNER @map(\\"owner\\")
+	OWNER @map("owner")
 }
 
 enum Foo {
@@ -66,7 +66,7 @@ enum Foo {
 
 // This is the User model
 model User {
-	id               Int        @id @default(autoincrement()) @map(\\"_id\\") @db.Value('foo')
+	id               Int        @id @default(autoincrement()) @map("_id") @db.Value('foo')
 	email            String     @unique @db.VarChar(4)
 	name             String?
 	// The user model
@@ -75,8 +75,8 @@ model User {
 	foo              Foo
 	bar              Foo?
 	// Relations are cool
-	posts            Post[]     @relation(\\"WrittenPosts\\")
-	pinned           Post?      @relation(\\"PinnedPost\\")
+	posts            Post[]     @relation("WrittenPosts")
+	pinned           Post?      @relation("PinnedPost")
 	createdAt        DateTime   @default(now())
 	updatedAt        DateTime   @updatedAt @db.Date(6)
 	@@index([mixin, index])
@@ -87,14 +87,14 @@ model Post {
 	published          Boolean   @default(false)
 	title              String
 	authorId           Int?
-	author             User?     @relation(\\"WrittenPosts\\", fields: [authorId], references: [id], onUpdate: Restrict, onDelete: SetNull)
+	author             User?     @relation("WrittenPosts", fields: [authorId], references: [id], onUpdate: Restrict, onDelete: SetNull)
 	pinnedById         Int?
-	pinnedBy           User?     @relation(\\"PinnedPost\\", fields: [pinnedById], references: [id])
+	pinnedBy           User?     @relation("PinnedPost", fields: [pinnedById], references: [id])
 	stars              Star[]
 	createdAt          DateTime  @default(now())
 	updatedAt          DateTime  @updatedAt @db.Date(6)
 	@@index([mixin, index])
-	@@map(\\"comments\\")
+	@@map("comments")
 }
 
 model Star {
@@ -105,11 +105,11 @@ model Star {
 	createdAt              DateTime                 @default(now())
 	updatedAt              DateTime                 @updatedAt @db.Date(6)
 	@@index([mixin, index])
-	location               Unsupported(\\"polygon\\")?
-	@@unique([A, B], map: \\"_AB_unique\\")
+	location               Unsupported("polygon")?
+	@@unique([A, B], map: "_AB_unique")
 	// Block level comments?
-	@@index([wow], map: \\"_B_index\\")
-	@@map(\\"Group\\")
+	@@index([wow], map: "_B_index")
+	@@map("Group")
 	@@fulltext([location, decimal])
 }"
 `;

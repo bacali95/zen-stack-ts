@@ -13,7 +13,7 @@ type Primitive =
   | BigInt
   | JsonValue;
 
-type Properties = Record<string, Primitive | Array<Primitive> | Column>;
+export type Properties = Record<string, Primitive | Array<Primitive> | Column>;
 
 // Converts a Key-Value value into a Prisma KV value string
 export const kv = (properties: Properties): string => {
