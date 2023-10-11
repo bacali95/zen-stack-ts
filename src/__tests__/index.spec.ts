@@ -1,3 +1,5 @@
+import * as Types from '../types';
+
 import {
   Array,
   Default,
@@ -13,11 +15,11 @@ import {
   References,
   String,
 } from '../';
+import { Enum, Key } from '../public/fields/enums';
+
 import codegen from '../codegen';
 import { enumeration } from '../codegen/enum';
 import { enumeration as enumerationColumn } from '../codegen/column';
-import { Enum, Key } from '../public/fields/enums';
-import * as Types from '../types';
 import schema from './schema';
 
 const generate = (
@@ -48,7 +50,7 @@ const generate = (
     ...overrides,
   });
 
-describe('refract', () => {
+describe('zen-stack-ts', () => {
   it('should generate the schema', () => {
     const { schema: prisma } = generate(schema);
 

@@ -1,12 +1,12 @@
 # Demo
 
-`refract.ts`
+`zen-stack.ts`
 
 ```typescript
-import Refract from '@cwqt/refract';
+import ZenStackTs from 'zen-stack-ts';
 import schema from './schema';
 
-Refract({
+ZenStackTs({
   datasource: {
     provider: 'postgresql',
     url: process.env.PG_URL,
@@ -25,7 +25,7 @@ Refract({
   schema,
 });
 
-// Generate the schema with `npx ts-node refract.ts`
+// Generate the schema with `npx ts-node zen-stack.ts`
 ```
 
 `schema.ts`

@@ -1,6 +1,6 @@
-# refract
+# zen-stack-ts
 
-Generate [Prisma](https://www.prisma.io) from TypeScript
+Generate [ZenStack](https://zenstack.dev) from TypeScript
 
 <div align="center">
   <img src="https://ftp.cass.si/hzywUm159.png" />
@@ -9,8 +9,8 @@ Generate [Prisma](https://www.prisma.io) from TypeScript
 ## Installation
 
 ```shell
-npm i -D @cwqt/refract
-yarn add -D @cwqt/refract
+npm i -D zen-stack-ts
+yarn add -D zen-stack-ts
 ```
 
 ## Usage
@@ -33,17 +33,17 @@ See [here for a full demo](./DEMO.md).
 
 ---
 
-Use the `Refract` default export of this package to generate a Prisma file.
+Use the `ZenStackTs` default export of this package to generate a Prisma file.
 
 ```typescript
 // schema.ts
 
 // Import the entry-point
-import Refract from '@cwqt/refract';
+import ZenStackTs from 'zen-stack-ts';
 // Import your custom Models
 import { Roles, User, Posts } from './models';
 
-Refract({
+ZenStackTs({
   // Supply models/enums for generation
   schema: [Roles, User, Posts],
   // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#datasource
@@ -146,7 +146,7 @@ Currently there's support for `mysql`, `postgresql`, `cockroachdb` & `mongodb` `
 attributes, and can be used like all the other modifiers.
 
 ```typescript
-import { MySql as db } from '@cwqt/refract';
+import { MySql as db } from 'zen-stack-ts';
 
 // email String @db.VarChar(255)
 m.Field('email', String(db.VarChar(255)));
@@ -283,7 +283,7 @@ const WithComment = Enum(
 Used for adding fields like `@@map`, `@@id`, `@@fulltext` etc.
 
 ```typescript
-import { Compound, Mongo as db } from '@cwqt/refract';
+import { Compound, Mongo as db } from 'zen-stack-ts';
 
 // Creating a compound index
 model
@@ -315,7 +315,7 @@ const User = Model('User').Field('id', PrimaryKey).Mixin(Timestamps);
 ## Programmatic usage
 
 ```typescript
-const prisma = Refract.generate({
+const prisma = ZenStackTs.generate({
   datasource: {...},
   generators: [...],
   schema
@@ -353,7 +353,7 @@ Post
   .Field("authorId",  Int())
   .Relation("author", ManyToOne(User, Fields("authorId"), References("id")))
 
-// refract.ts ------------------------------
+// zen-stack.ts ------------------------------
 import * as schema from './models'
 
 // IMPORTANT: import the model files which performs the `.Field()`, `.Relation()`
@@ -361,7 +361,7 @@ import * as schema from './models'
 import "./posts";
 import "./users";
 
-Refract({
+ZenStackTs({
   datasource: {...},
   generators: [...],
   schema

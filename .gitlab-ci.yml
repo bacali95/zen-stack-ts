@@ -1,6 +1,0 @@
-run:
-  stage: test
-  image: node:latest
-  script:
-    - yarn install
-    - yarn test

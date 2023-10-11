@@ -5,7 +5,6 @@
     "jsx": "react",
     "sourceMap": false,
     "experimentalDecorators": true,
-    "noImplicitUseStrict": true,
     "removeComments": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,

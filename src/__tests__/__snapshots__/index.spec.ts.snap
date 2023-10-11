@@ -8,7 +8,7 @@ exports[` 3`] = `"	test Example @default(Foo)"`;
 
 exports[` 4`] = `"	test Example? @default(Foo)"`;
 
-exports[`refract enum block generation should generate an enum 1`] = `
+exports[`zen-stack-ts enum block generation should generate an enum 1`] = `
 "enum Example {
 	Qux
 	// This is a comment
@@ -17,7 +17,7 @@ exports[`refract enum block generation should generate an enum 1`] = `
 }"
 `;
 
-exports[`refract enum block generation should generate an enum with a comment 1`] = `
+exports[`zen-stack-ts enum block generation should generate an enum with a comment 1`] = `
 "// An Enum with a comment
 enum Example {
 	Qux
@@ -27,8 +27,8 @@ enum Example {
 }"
 `;
 
-exports[`refract should generate the schema 1`] = `
-"// refract https://github.com/cwqt/refract - generated in x ms -----------------
+exports[`zen-stack-ts should generate the schema 1`] = `
+"// zen-stack-ts https://github.com/bacali95/zen-stack-ts - generated in x ms ---
 // datasource ----------------------------------------------------------------------
 
 datasource db {

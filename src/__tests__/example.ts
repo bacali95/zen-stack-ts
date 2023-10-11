@@ -1,15 +1,23 @@
-import Refract, {
-  Boolean, DateTime, Default,
+import ZenStackTs, {
+  Boolean,
+  DateTime,
+  Default,
   Enum,
-  Fields, Id,
+  Fields,
+  Id,
   Int,
-  Key, ManyToOne, Mixin,
+  Key,
+  ManyToOne,
+  Mixin,
   Model,
-  MySql as db,
-  Nullable, OneToMany, References,
+  Nullable,
+  OneToMany,
+  References,
   String,
-  Unique, UpdatedAt,
-  Types
+  Types,
+  Unique,
+  UpdatedAt,
+  MySql as db
 } from '..';
 
 const datasource: Types.Config["datasource"] = { provider: "mysql", url: 'env("URL")' }
@@ -59,7 +67,9 @@ Post
   .Field("authorId",  Int(Nullable));
 
 
-Refract({ schema: [User, Post, Role], datasource, generators })
+ZenStackTs({ schema: [User, Post, Role], datasource, generators })
+
+
 
 
 

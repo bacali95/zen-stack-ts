@@ -1,14 +1,16 @@
-import { performance } from 'perf_hooks';
 import * as Types from '../types';
-import { validate } from '../types';
-import { del, nonNullable } from '../types/utils';
-import { alignKv } from './align';
+
 import { block, header } from './block';
-import { enumeration } from './enum';
+import { del, nonNullable } from '../types/utils';
+
+import { alignKv } from './align';
 import { dedent } from './lib/dedent';
-import { pipe } from './lib/pipe';
-import { model } from './model';
+import { enumeration } from './enum';
 import { kv } from './transform';
+import { model } from './model';
+import { performance } from 'perf_hooks';
+import { pipe } from './lib/pipe';
+import { validate } from '../types';
 import { validateModel } from './validate';
 
 // Takes a Config input & returns a generated Prisma schema file as a string
@@ -62,7 +64,7 @@ export default (
     output: config.output,
     schema: [
       header(
-        `refract https://github.com/cwqt/refract - generated in ${time} ms`,
+        `zen-stack-ts https://github.com/bacali95/zen-stack-ts - generated in ${time} ms`,
       ),
       generated,
     ].join('\n'),
