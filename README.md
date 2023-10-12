@@ -1,6 +1,6 @@
 # zen-stack-ts
 
-Generate [ZenStack](https://zenstack.dev) from TypeScript
+Generate [ZenStack](https://zenstack.dev) from TypeScript, based on [Refract](https://github.com/cwqt/refract).
 
 <div align="center">
   <img src="https://ftp.cass.si/hzywUm159.png" />
