@@ -38,7 +38,7 @@ export type SwrPlugin = BasePlugin & {
 export type TanStackQueryPlugin = BasePlugin & {
   provider: '@zenstackhq/tanstack-query';
   output: string;
-  target: string;
+  target: 'react' | 'svelte';
   useSuperJson?: boolean;
 };
 
