@@ -22,10 +22,7 @@ import { enumeration } from '../codegen/enum';
 import { enumeration as enumerationColumn } from '../codegen/column';
 import schema from './schema';
 
-const generate = (
-  schema: Types.Config['schema'],
-  overrides: Partial<Types.Config> = {},
-) =>
+const generate = (schema: Types.Config['schema'], overrides: Partial<Types.Config> = {}) =>
   codegen({
     schema,
     datasource: {
@@ -38,12 +35,7 @@ const generate = (
       {
         name: 'client',
         provider: 'prisma-client-js',
-        binaryTargets: [
-          'native',
-          'rhel-openssl-1.0.x',
-          'linux-arm64-openssl-1.0.x',
-          'darwin-arm64',
-        ],
+        binaryTargets: ['native', 'rhel-openssl-1.0.x', 'linux-arm64-openssl-1.0.x', 'darwin-arm64'],
         previewFeatures: ['referentialIntegrity'],
       },
     ],
@@ -61,15 +53,9 @@ describe('zen-stack-ts', () => {
     const Post = Model('Post');
     const Category = Model('Category');
 
-    Post.Field('id', Int(Id, Default('autoincrement()'))).Relation(
-      'categories',
-      OneToMany(Category),
-    );
+    Post.Field('id', Int(Id, Default('autoincrement()'))).Relation('categories', OneToMany(Category));
 
-    Category.Field('id', Int(Id, Default('autoincrement()'))).Relation(
-      'posts',
-      OneToMany(Post),
-    );
+    Category.Field('id', Int(Id, Default('autoincrement()'))).Relation('posts', OneToMany(Post));
 
     const implicit = generate([Post, Category]);
     console.log(implicit.schema);
@@ -77,27 +63,14 @@ describe('zen-stack-ts', () => {
 
   describe('enum block generation', () => {
     it('should generate an enum', () => {
-      const e = enumeration(
-        Enum(
-          'Example',
-          Key('Qux'),
-          Key('Foo', 'This is a comment'),
-          Key('Bar', Map('Baz')),
-        ),
-      );
+      const e = enumeration(Enum('Example', Key('Qux'), Key('Foo', 'This is a comment'), Key('Bar', Map('Baz'))));
 
       expect(e).toMatchSnapshot();
     });
 
     it('should generate an enum with a comment', () => {
       const e = enumeration(
-        Enum(
-          'Example',
-          'An Enum with a comment',
-          Key('Qux'),
-          Key('Foo', 'This is a comment'),
-          Key('Bar', Map('Baz')),
-        ),
+        Enum('Example', 'An Enum with a comment', Key('Qux'), Key('Foo', 'This is a comment'), Key('Bar', Map('Baz'))),
       );
 
       expect(e).toMatchSnapshot();
@@ -130,10 +103,7 @@ describe('zen-stack-ts', () => {
       const User = Model('User');
       const Post = Model('Post');
 
-      User.Field('id', Int()).Relation(
-        'posts',
-        OneToMany(Post, 'WrittenPosts'),
-      );
+      User.Field('id', Int()).Relation('posts', OneToMany(Post, 'WrittenPosts'));
       Post.Field('authorId', Int(Nullable)).Relation(
         'author',
         ManyToOne(User, Fields('authorId'), References('id'), Nullable),
@@ -159,10 +129,7 @@ describe('zen-stack-ts', () => {
       const Post = Model('Post');
 
       User.Field('id', Int());
-      Post.Relation(
-        'author',
-        ManyToOne(User, Fields('authorId'), References('id'), Nullable),
-      );
+      Post.Relation('author', ManyToOne(User, Fields('authorId'), References('id'), Nullable));
 
       expect(() => generate([User, Post])).toThrow(
         "RelationshipErr: Columns in 'fields' don't exist in model 'Post': 'authorId'",
@@ -173,10 +140,7 @@ describe('zen-stack-ts', () => {
       const User = Model('User');
       const Post = Model('Post');
 
-      Post.Field('authorId', Int()).Relation(
-        'author',
-        ManyToOne(User, Fields('authorId'), References('id'), Nullable),
-      );
+      Post.Field('authorId', Int()).Relation('author', ManyToOne(User, Fields('authorId'), References('id'), Nullable));
 
       expect(() => generate([User, Post])).toThrow(
         "RelationshipErr: Referenced columns in 'references' don't exist in model 'User': 'id'",
@@ -190,15 +154,7 @@ describe('zen-stack-ts', () => {
       User.Field('id', Int());
       Post.Field('authorId', Int())
         .Field('secondId', Int())
-        .Relation(
-          'author',
-          ManyToOne(
-            User,
-            Fields('authorId', 'secondId'),
-            References('id'),
-            Nullable,
-          ),
-        );
+        .Relation('author', ManyToOne(User, Fields('authorId', 'secondId'), References('id'), Nullable));
 
       expect(() => generate([User, Post])).toThrow(
         "RelationshipErr: You must specify the same number of fields in 'fields' and 'references' for relation 'author' in model 'Post'",
@@ -212,15 +168,7 @@ describe('zen-stack-ts', () => {
       User.Field('id', Int()).Field('name', String());
       Post.Field('authorId', Int())
         .Field('authorName', Int())
-        .Relation(
-          'author',
-          ManyToOne(
-            User,
-            Fields('authorId', 'authorName'),
-            References('id', 'name'),
-            Nullable,
-          ),
-        );
+        .Relation('author', ManyToOne(User, Fields('authorId', 'authorName'), References('id', 'name'), Nullable));
 
       expect(() => generate([User, Post])).toThrow(
         "RelationshipErr: The type of the field 'authorName' in the model 'Post' does not match the type of the referenced field 'name' in model 'User'",
@@ -261,9 +209,7 @@ describe('zen-stack-ts', () => {
         generate([User], {
           datasource: { provider: 'postgresql', url: 'url' },
         }),
-      ).toThrow(
-        "ModifierErr: Field 'id' cannot be an array and optional in the same time",
-      );
+      ).toThrow("ModifierErr: Field 'id' cannot be an array and optional in the same time");
     });
   });
 });

@@ -5,9 +5,7 @@ import { isString, nonNullable } from '../../types/utils';
 import { Int, String } from './scalars';
 
 // @relation("name", fields:[foo], references: ["bar"])
-type OptionallyWithName<T extends Relation, M extends Types.Modifier<T>[]> =
-  | [name: string, ...rest: M]
-  | M;
+type OptionallyWithName<T extends Relation, M extends Types.Modifier<T>[]> = [name: string, ...rest: M] | M;
 
 export const OneToMany = <M extends Types.Blocks.Model>(
   model: M,
@@ -17,27 +15,18 @@ export const OneToMany = <M extends Types.Blocks.Model>(
     type: 'OneToMany' as const,
     modifiers: [
       { type: 'model', value: model },
-      ...(isString(modifiers[0])
-        ? [{ type: 'name', value: modifiers[0] }, ...modifiers.slice(1)]
-        : modifiers),
+      ...(isString(modifiers[0]) ? [{ type: 'name', value: modifiers[0] }, ...modifiers.slice(1)] : modifiers),
     ],
-  } as Types.Fields.Field<'OneToMany'>);
+  }) as Types.Fields.Field<'OneToMany'>;
 
-export const ManyToOne = <
-  T extends 'ManyToOne',
-  M extends Types.Blocks.Model,
-  K extends Types.Modifiers<'ManyToOne'>,
->(
+export const ManyToOne = <T extends 'ManyToOne', M extends Types.Blocks.Model, K extends Types.Modifiers<'ManyToOne'>>(
   model: M,
   ...modifiers: OptionallyWithName<
     'ManyToOne',
     [
       fields: Types.Modifier<'ManyToOne', 'fields'>,
       references: Types.Modifier<'ManyToOne', 'references'>,
-      ...modifiers: Types.Modifier<
-        'ManyToOne',
-        Exclude<K, 'fields' | 'references' | 'name'>
-      >[],
+      ...modifiers: Types.Modifier<'ManyToOne', Exclude<K, 'fields' | 'references' | 'name'>>[],
     ]
   >
 ): Types.Fields.Field<T, K> => ({
@@ -47,17 +36,11 @@ export const ManyToOne = <
       type: 'model' as const,
       value: model,
     },
-    ...(isString(modifiers[0])
-      ? [{ type: 'name', value: modifiers[0] }, ...modifiers.slice(1)]
-      : modifiers),
+    ...(isString(modifiers[0]) ? [{ type: 'name', value: modifiers[0] }, ...modifiers.slice(1)] : modifiers),
   ].filter(nonNullable) as Types.Modifier<T, K>[],
 });
 
-export const OneToOne = <
-  T extends 'OneToOne',
-  M extends Types.Blocks.Model,
-  K extends Types.Modifiers<'OneToOne'>,
->(
+export const OneToOne = <T extends 'OneToOne', M extends Types.Blocks.Model, K extends Types.Modifiers<'OneToOne'>>(
   model: M,
   ...modifiers:
     | OptionallyWithName<
@@ -65,16 +48,10 @@ export const OneToOne = <
         [
           fields: Types.Modifier<'OneToOne', 'fields'>,
           references: Types.Modifier<'OneToOne', 'references'>,
-          ...modifiers: Types.Modifier<
-            'OneToOne',
-            Exclude<K, 'fields' | 'references' | 'name'>
-          >[],
+          ...modifiers: Types.Modifier<'OneToOne', Exclude<K, 'fields' | 'references' | 'name'>>[],
         ]
       >
-    | OptionallyWithName<
-        T,
-        Types.Modifier<T, Exclude<K, 'fields' | 'references'>>[]
-      >
+    | OptionallyWithName<T, Types.Modifier<T, Exclude<K, 'fields' | 'references'>>[]>
 ): Types.Fields.Field<T, K> => ({
   type: 'OneToOne' as const as T,
   modifiers: [
@@ -82,19 +59,12 @@ export const OneToOne = <
       type: 'model' as const,
       value: model,
     },
-    ...(isString(modifiers[0])
-      ? [{ type: 'name', value: modifiers[0] }, ...modifiers.slice(1)]
-      : modifiers),
+    ...(isString(modifiers[0]) ? [{ type: 'name', value: modifiers[0] }, ...modifiers.slice(1)] : modifiers),
   ].filter(nonNullable) as Types.Modifier<T, K>[],
 });
 
 export const Fields = <T extends 'OneToOne' | 'ManyToOne'>(
-  ...fields:
-    | string[]
-    | [
-        reference: string,
-        scalar: Types.Fields.Field<'Int'> | Types.Fields.Field<'String'>,
-      ]
+  ...fields: string[] | [reference: string, scalar: Types.Fields.Field<'Int'> | Types.Fields.Field<'String'>]
 ): Types.Modifier<T, 'fields'> => ({
   type: 'fields' as const,
   value: fields,

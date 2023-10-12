@@ -1,11 +1,6 @@
 import { Provider } from '../../types';
 
-export type DbModifier<
-  T extends string,
-  P extends Provider,
-  N extends string,
-  K,
-> = {
+export type DbModifier<T extends string, P extends Provider, N extends string, K> = {
   scalar: T;
   provider: P;
   value: K;
@@ -15,10 +10,7 @@ export type DbModifier<
 export const db = <P extends Provider>(provider: P) => {
   const type =
     <T extends string>(scalar: T) =>
-    <N extends string, K = true>(
-      name: N,
-      value?: K | undefined,
-    ): DbModifier<T, P, `@db.${P}.${N}`, K> => ({
+    <N extends string, K = true>(name: N, value?: K | undefined): DbModifier<T, P, `@db.${P}.${N}`, K> => ({
       type: `@db.${provider}.${name}`,
       value,
       scalar,

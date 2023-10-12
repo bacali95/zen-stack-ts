@@ -5,14 +5,11 @@ export const alignKv = (value: string): string => {
   const lines = value.split('\n');
   const delimiter = '=';
 
-  const max =
-    Math.max(...lines.map(l => l.trim().split(delimiter).shift().length)) + 1;
+  const max = Math.max(...lines.map(l => l.trim().split(delimiter).shift().length)) + 1;
 
   return lines
     .map(line => line.split(delimiter))
-    .map(([head, ...rest]) =>
-      [head.padEnd(max), delimiter, ...rest.map(v => v.trim())].join(' '),
-    )
+    .map(([head, ...rest]) => [head.padEnd(max), delimiter, ...rest.map(v => v.trim())].join(' '))
     .join('\n');
 };
 
@@ -23,19 +20,14 @@ export const alignFields = (value: string): string => {
   const [maximumColumnName, maximumColumnType] = lines
     .map(l => l.split(/ +/))
     .reduce(
-      ([maxName, maxType], [name, type]) => [
-        Math.max(maxName, name.length),
-        Math.max(maxType, (type ?? '').length),
-      ],
+      ([maxName, maxType], [name, type]) => [Math.max(maxName, name.length), Math.max(maxType, (type ?? '').length)],
       [0, 0],
     );
 
   return lines
     .map(line => line.split(/ +/))
     .map(([columnName, columnType, ...rest]) =>
-      ([n => n.startsWith('@@'), n => n == '//'].some(fn =>
-        fn(columnName.trim()),
-      )
+      ([n => n.startsWith('@@'), n => n == '//'].some(fn => fn(columnName.trim()))
         ? [columnName, columnType, ...rest].filter(nonNullable)
         : [
             columnName.padEnd(maximumColumnName + 1),

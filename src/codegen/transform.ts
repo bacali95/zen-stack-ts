@@ -3,15 +3,7 @@ import { JsonValue } from './lib/json';
 import { entries } from '../types/utils';
 
 // Prisma KV column types
-type Primitive =
-  | Date
-  | boolean
-  | number
-  | string
-  | true
-  | false
-  | BigInt
-  | JsonValue;
+type Primitive = Date | boolean | number | string | true | false | BigInt | JsonValue;
 
 export type Properties = Record<string, Primitive | Array<Primitive> | Column>;
 

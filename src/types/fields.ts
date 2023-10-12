@@ -26,12 +26,7 @@ export type Compound = keyof Types.Compounds;
 
 export type Any = Scalar | Relation | Enum | Compound | 'Raw' | 'Unsupported';
 
-export type ReferentialAction =
-  | 'Cascade'
-  | 'Restrict'
-  | 'NoAction'
-  | 'SetNull'
-  | 'SetDefault';
+export type ReferentialAction = 'Cascade' | 'Restrict' | 'NoAction' | 'SetNull' | 'SetDefault';
 
 // Top type for columns
 type TopColumn = {
@@ -63,9 +58,7 @@ export function isEnum(column: TopColumn): column is Column<'Enum'> {
   return column.type == 'Enum';
 }
 
-export function isUnsupported(
-  column: TopColumn,
-): column is Column<'Unsupported'> {
+export function isUnsupported(column: TopColumn): column is Column<'Unsupported'> {
   return column.type == 'Unsupported';
 }
 
@@ -73,20 +66,13 @@ export function isRelation(column: TopColumn): column is Column<Relation> {
   return ['OneToMany', 'ManyToOne', 'OneToOne'].includes(column.type);
 }
 
-export function isDbModifier(
-  column: Modifier<any>,
-): column is DbModifier<string, Provider, string, any> {
+export function isDbModifier(column: Modifier<any>): column is DbModifier<string, Provider, string, any> {
   return (column.type as string).startsWith('@db');
 }
 
 export function isScalar(column: TopColumn): column is Column<Scalar> {
   return (
     typeof column == 'object' &&
-    [
-      isRelation(column),
-      isEnumKey(column),
-      isEnum(column),
-      isCompound(column),
-    ].every(v => v == false)
+    [isRelation(column), isEnumKey(column), isEnum(column), isCompound(column)].every(v => v == false)
   );
 }

@@ -17,13 +17,8 @@
  *
  * @since 2.0.0
  */
-export function pipe<A extends ReadonlyArray<unknown>, B>(
-  ab: (...a: A) => B,
-): (...a: A) => B;
-export function pipe<A extends ReadonlyArray<unknown>, B, C>(
-  ab: (...a: A) => B,
-  bc: (b: B) => C,
-): (...a: A) => C;
+export function pipe<A extends ReadonlyArray<unknown>, B>(ab: (...a: A) => B): (...a: A) => B;
+export function pipe<A extends ReadonlyArray<unknown>, B, C>(ab: (...a: A) => B, bc: (b: B) => C): (...a: A) => C;
 export function pipe<A extends ReadonlyArray<unknown>, B, C, D>(
   ab: (...a: A) => B,
   bc: (b: B) => C,
@@ -69,18 +64,7 @@ export function pipe<A extends ReadonlyArray<unknown>, B, C, D, E, F, G, H, I>(
   gh: (g: G) => H,
   hi: (h: H) => I,
 ): (...a: A) => I;
-export function pipe<
-  A extends ReadonlyArray<unknown>,
-  B,
-  C,
-  D,
-  E,
-  F,
-  G,
-  H,
-  I,
-  J,
->(
+export function pipe<A extends ReadonlyArray<unknown>, B, C, D, E, F, G, H, I, J>(
   ab: (...a: A) => B,
   bc: (b: B) => C,
   cd: (c: C) => D,
@@ -135,9 +119,7 @@ export function pipe(
       };
     case 9:
       return function (this: unknown) {
-        return ij!(
-          hi!(gh!(fg!(ef!(de!(cd!(bc!(ab.apply(this, arguments)))))))),
-        );
+        return ij!(hi!(gh!(fg!(ef!(de!(cd!(bc!(ab.apply(this, arguments)))))))));
       };
   }
   return;

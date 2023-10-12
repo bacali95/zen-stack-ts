@@ -15,15 +15,11 @@ import { validateModel } from './validate';
 
 // Takes a Config input & returns a generated Prisma schema file as a string
 // which can then be written to a file / formatted by Prisma CLI
-export default (
-  config: Types.Config,
-): { schema: string; time: number; output: string } => {
+export default (config: Types.Config): { schema: string; time: number; output: string } => {
   const start = performance.now();
 
   // Allow direct imports, e.g. `import * as schema from './foo'`
-  const schema = Array.isArray(config.schema)
-    ? config.schema
-    : Object.values(config.schema);
+  const schema = Array.isArray(config.schema) ? config.schema : Object.values(config.schema);
 
   config = validate({ ...config, schema });
 
@@ -42,19 +38,12 @@ export default (
       block('datasource db', alignKv(kv(datasource))),
       group(
         header('generators'),
-        generators.map(generator =>
-          block(
-            `generator ${generator.name}`,
-            alignKv(kv(del(generator, 'name'))),
-          ),
-        ),
+        generators.map(generator => block(`generator ${generator.name}`, alignKv(kv(del(generator, 'name'))))),
       ),
       plugins &&
         group(
           header('plugins'),
-          plugins.map(plugin =>
-            block(`plugin ${plugin.name}`, alignKv(kv(del(plugin, 'name')))),
-          ),
+          plugins.map(plugin => block(`plugin ${plugin.name}`, alignKv(kv(del(plugin, 'name'))))),
         ),
       group(header('enums'), enums.map(enumeration)),
       group(header('models'), models.map(pipe(validateModel(config), model))),
@@ -70,11 +59,8 @@ export default (
   return {
     time,
     output: config.output,
-    schema: [
-      header(
-        `zen-stack-ts https://github.com/bacali95/zen-stack-ts - generated in ${time} ms`,
-      ),
-      generated,
-    ].join('\n'),
+    schema: [header(`zen-stack-ts https://github.com/bacali95/zen-stack-ts - generated in ${time} ms`), generated].join(
+      '\n',
+    ),
   };
 };

@@ -22,9 +22,18 @@ export const Expression = {
     name,
     args,
   }),
-  Literal: (value: string | number | boolean): LiteralExpression => ({ type: 'literal', value }),
-  Array: (...values: PolicyExpression[]): ArrayExpression => ({ type: 'array', values }),
-  Reference: (identifier: string): ReferenceExpression => ({ type: 'reference', identifier }),
+  Literal: (value: string | number | boolean): LiteralExpression => ({
+    type: 'literal',
+    value,
+  }),
+  Array: (...values: PolicyExpression[]): ArrayExpression => ({
+    type: 'array',
+    values,
+  }),
+  Reference: (identifier: string): ReferenceExpression => ({
+    type: 'reference',
+    identifier,
+  }),
   MemberAccess: (expression: PolicyExpression, identifier: string): MemberAccessExpression => ({
     type: 'member-access',
     expression,
@@ -40,7 +49,10 @@ export const Expression = {
     operator,
     rightOperand,
   }),
-  Unary: (expression: PolicyExpression): UnaryExpression => ({ type: 'unary', expression }),
+  Unary: (expression: PolicyExpression): UnaryExpression => ({
+    type: 'unary',
+    expression,
+  }),
   CollectionPredicate: (
     expression: PolicyExpression,
     predicate: PolicyPredicate,

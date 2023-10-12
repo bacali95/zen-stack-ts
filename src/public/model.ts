@@ -11,24 +11,16 @@ type Model = {
   Extends: (model: Model) => Model;
   Mixin: (...mixins: Types.Mixin[]) => Model;
   Raw: (value: string) => Model;
-  Relation: <T extends Types.Fields.Relation>(
-    name: string,
-    type: Types.Fields.Field<T>,
-    comment?: string,
-  ) => Model;
+  Relation: <T extends Types.Fields.Relation>(name: string, type: Types.Fields.Field<T>, comment?: string) => Model;
   Field: <T extends Types.Fields.Scalar | 'Enum' | 'Unsupported'>(
     name: string,
     type: Types.Fields.Field<T>,
     comment?: string,
   ) => Model;
-  Block: <T extends Types.Fields.Compound>(
-    type: Types.Fields.Field<T>,
-    comment?: string,
-  ) => Model;
+  Block: <T extends Types.Fields.Compound>(type: Types.Fields.Field<T>, comment?: string) => Model;
 } & Types.Blocks.Model;
 
-export const Model = (name: string, comment?: string): Model =>
-  new $Model(name, comment);
+export const Model = (name: string, comment?: string): Model => new $Model(name, comment);
 
 export class $Model implements Types.Blocks.Model, Model {
   name: string;
@@ -61,9 +53,7 @@ export class $Model implements Types.Blocks.Model, Model {
   }
 
   Mixin(...mixins: Types.Mixin[]) {
-    mixins.forEach(mixin =>
-      this.columns.push(...(mixin.columns as Types.Column<Types.Type>[])),
-    );
+    mixins.forEach(mixin => this.columns.push(...(mixin.columns as Types.Column<Types.Type>[])));
 
     return this;
   }
@@ -80,13 +70,8 @@ export class $Model implements Types.Blocks.Model, Model {
     return this;
   }
 
-  Relation<T extends Types.Fields.Relation>(
-    name: string,
-    type: Types.Fields.Field<T>,
-    comment?: string,
-  ) {
-    if (comment)
-      type.modifiers.push({ type: 'comment', value: comment } as any);
+  Relation<T extends Types.Fields.Relation>(name: string, type: Types.Fields.Field<T>, comment?: string) {
+    if (comment) type.modifiers.push({ type: 'comment', value: comment } as any);
 
     // Fields('column', Int())
     const fields = type.modifiers.find(m => m.type == 'fields');
@@ -105,19 +90,14 @@ export class $Model implements Types.Blocks.Model, Model {
     type: Types.Fields.Field<T>,
     comment?: string,
   ) {
-    if (comment)
-      type.modifiers.push({ type: 'comment', value: comment } as any);
+    if (comment) type.modifiers.push({ type: 'comment', value: comment } as any);
 
     this.columns.push({ name, ...type } as unknown as Types.Column<Types.Type>);
     return this;
   }
 
-  Block<T extends Types.Fields.Compound>(
-    type: Types.Fields.Field<T>,
-    comment?: string,
-  ) {
-    if (comment)
-      type.modifiers.push({ type: 'comment', value: comment } as any);
+  Block<T extends Types.Fields.Compound>(type: Types.Fields.Field<T>, comment?: string) {
+    if (comment) type.modifiers.push({ type: 'comment', value: comment } as any);
 
     this.columns.push(type as unknown as Types.Column<Types.Type>);
     return this;

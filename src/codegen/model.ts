@@ -7,27 +7,19 @@ import { nonNullable } from '../types/utils';
 
 export const model = (model: Types.Blocks.Model): string => {
   const [comments, columns] = extractComments(model.columns);
-  const modelType =
-    model.type === 'abstract-model' ? 'abstract model' : 'model';
-  const modelExtends = model.extends.length
-    ? `extends ${model.extends.map(parent => parent.name).join(', ')}`
-    : '';
+  const modelType = model.type === 'abstract-model' ? 'abstract model' : 'model';
+  const modelExtends = model.extends.length ? `extends ${model.extends.map(parent => parent.name).join(', ')}` : '';
 
   return [
     comments,
-    block(
-      `${modelType} ${model.name} ${modelExtends}`.trim(),
-      alignFields(columns.map(column).join('\n')),
-    ),
+    block(`${modelType} ${model.name} ${modelExtends}`.trim(), alignFields(columns.map(column).join('\n'))),
   ]
     .filter(nonNullable)
     .join('\n')
     .trim();
 };
 
-export const extractComments = (
-  columns: Types.Column<any>[],
-): [outside: string, columns: Types.Column[]] => {
+export const extractComments = (columns: Types.Column<any>[]): [outside: string, columns: Types.Column[]] => {
   return [
     // All comment rows for a model are placed outside the model block def
     columns

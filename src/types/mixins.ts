@@ -7,9 +7,6 @@ export type Mixin = {
     type: Fields.Field<T>,
     comment?: string,
   ) => Mixin;
-  Block: <T extends Fields.Compound>(
-    type: Fields.Field<T>,
-    comment?: string,
-  ) => Mixin;
+  Block: <T extends Fields.Compound>(type: Fields.Field<T>, comment?: string) => Mixin;
   columns: Column<Type>[];
 };

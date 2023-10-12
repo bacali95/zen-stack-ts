@@ -28,7 +28,10 @@ export type FunctionExpression<Name extends keyof PolicyFunction = keyof PolicyF
   args: PolicyFunction[Name];
 };
 
-export type LiteralExpression = { type: 'literal'; value: string | number | boolean };
+export type LiteralExpression = {
+  type: 'literal';
+  value: string | number | boolean;
+};
 
 export type ArrayExpression = { type: 'array'; values: PolicyExpression[] };
 

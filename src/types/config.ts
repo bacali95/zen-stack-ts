@@ -2,13 +2,7 @@ import { Block } from './blocks';
 import { Plugin } from './plugins';
 import path from 'path';
 
-export type Provider =
-  | 'mongodb'
-  | 'postgresql'
-  | 'mysql'
-  | 'sqlite'
-  | 'sqlserver'
-  | 'cockroachdb';
+export type Provider = 'mongodb' | 'postgresql' | 'mysql' | 'sqlite' | 'sqlserver' | 'cockroachdb';
 
 export type Datasource = {
   provider: Provider;
@@ -46,11 +40,7 @@ export type Config = {
 
 export const validate = (config: Config): Config => {
   if (config.datasource.referentialIntegrity) {
-    if (
-      !config.generators.some(
-        g => g.previewFeatures?.includes('referentialIntegrity'),
-      )
-    )
+    if (!config.generators.some(g => g.previewFeatures?.includes('referentialIntegrity')))
       throw new Error(
         "Must have a generator with the 'referentialIntegrity' preview feature enabled to use referential integrity in the datasource",
       );
@@ -59,14 +49,10 @@ export const validate = (config: Config): Config => {
   if (config.datasource.provider == 'mysql') {
     if (
       config.generators.some(
-        g =>
-          g.previewFeatures?.includes('fullTextSearch') &&
-          !g.previewFeatures?.includes('fullTextIndex'),
+        g => g.previewFeatures?.includes('fullTextSearch') && !g.previewFeatures?.includes('fullTextIndex'),
       )
     )
-      throw new Error(
-        'MySQL Users must include both fullTextSearch & fullTextIndex in the preview features.',
-      );
+      throw new Error('MySQL Users must include both fullTextSearch & fullTextIndex in the preview features.');
   }
 
   return {

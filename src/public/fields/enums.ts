@@ -18,24 +18,22 @@ export const Key = <T extends string>(
     ? {
         name,
         modifiers: [
-          ...(modifiers.slice(
-            0,
-            modifiers.length - 1,
-          ) as unknown as Types.Modifier<'EnumKey'>[]),
+          ...(modifiers.slice(0, modifiers.length - 1) as unknown as Types.Modifier<'EnumKey'>[]),
           { type: 'comment' as const, value: args[args.length - 1] as string },
         ],
       }
     : { name, modifiers: modifiers as Types.Modifier<'EnumKey'>[] };
 };
 
-class $Enum<K extends Types.Fields.EnumKey[]>
-  extends Function
-  implements Types.Blocks.Block<'enum'>
-{
+class $Enum<K extends Types.Fields.EnumKey[]> extends Function implements Types.Blocks.Block<'enum'> {
   type: 'enum' = 'enum' as const;
   columns: Types.Column<'EnumKey' | 'Comment'>[];
 
-  constructor(public name: string, comment: string | null, keys: K) {
+  constructor(
+    public name: string,
+    comment: string | null,
+    keys: K,
+  ) {
     super();
 
     // Define the keys of the enum
@@ -45,7 +43,7 @@ class $Enum<K extends Types.Fields.EnumKey[]>
           name: k.name,
           type: 'EnumKey' as const,
           modifiers: k.modifiers,
-        } as Types.Column<'EnumKey' | 'Comment'>),
+        }) as Types.Column<'EnumKey' | 'Comment'>,
     );
 
     if (comment) {
@@ -58,11 +56,8 @@ class $Enum<K extends Types.Fields.EnumKey[]>
 
     // evil object reference proxy hacking _call overrides gives us nice curried classes
     return new Proxy(this, {
-      apply: (
-        target,
-        _,
-        args: [K[number] | Types.Modifier<'Enum'>, ...Types.Modifier<'Enum'>[]],
-      ) => target._call(...(args as any)),
+      apply: (target, _, args: [K[number] | Types.Modifier<'Enum'>, ...Types.Modifier<'Enum'>[]]) =>
+        target._call(...(args as any)),
     });
   }
 
@@ -84,9 +79,7 @@ class $Enum<K extends Types.Fields.EnumKey[]>
             : (initial as Types.Modifier<'Enum'>),
           ...modifiers,
         ],
-      ].filter(
-        (v, i, a) => nonNullable(v) && a.findIndex(m => m.type == v.type) === i,
-      ) as Types.Modifier<'Enum'>[],
+      ].filter((v, i, a) => nonNullable(v) && a.findIndex(m => m.type == v.type) === i) as Types.Modifier<'Enum'>[],
     };
   }
 }
@@ -98,19 +91,9 @@ type R<E extends Types.Fields.EnumKey[]> = (<M extends Types.Modifiers<'Enum'>>(
 ) => Types.Fields.Field<'Enum', M>) &
   Types.Blocks.Enum;
 
-export function Enum<E extends Types.Fields.EnumKey[]>(
-  name: string,
-  ...keys: E
-): R<E>;
-export function Enum<E extends Types.Fields.EnumKey[]>(
-  name: string,
-  comment: string,
-  ...keys: E
-): R<E>;
-export function Enum<E extends Types.Fields.EnumKey[]>(
-  name: string,
-  ...args: [string, ...E] | E
-): R<E> {
+export function Enum<E extends Types.Fields.EnumKey[]>(name: string, ...keys: E): R<E>;
+export function Enum<E extends Types.Fields.EnumKey[]>(name: string, comment: string, ...keys: E): R<E>;
+export function Enum<E extends Types.Fields.EnumKey[]>(name: string, ...args: [string, ...E] | E): R<E> {
   const [comment, ...keys] = args;
   return new $Enum(
     name,
