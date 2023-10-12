@@ -1,5 +1,7 @@
 # zen-stack-ts
 
+[![npm version](https://badge.fury.io/js/zen-stack-ts.svg)](https://badge.fury.io/js/zen-stack-ts)
+
 Generate [ZenStack](https://zenstack.dev) from TypeScript, based on [Refract](https://github.com/cwqt/refract).
 
 <div align="center">
