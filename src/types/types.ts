@@ -1,11 +1,38 @@
-import { ReferentialAction, Scalar } from './fields';
-
 import { JsonValue } from '../codegen/lib/json';
 import { MergeDbModifiers } from './modifiers';
 import { Model } from './blocks';
+import { ReferentialAction } from './fields';
 import { Types } from '..';
 
 type Append<T, K> = { [index in keyof T]: T[index] & K };
+
+type AccessPolicy<T> = {
+  operation: T;
+  condition: string | Types.PolicyExpression;
+};
+
+export type FieldAccessPolicy = AccessPolicy<'all' | ('read' | 'update')[]>;
+
+export type ModelAccessPolicy = AccessPolicy<'all' | ('create' | 'read' | 'update' | 'delete')[]>;
+
+export type NumberValidationModifiers<T extends number | BigInt = number> = {
+  gt?: {
+    value: T;
+    message?: string;
+  };
+  gte?: {
+    value: T;
+    message?: string;
+  };
+  lt?: {
+    value: T;
+    message?: string;
+  };
+  lte?: {
+    value: T;
+    message?: string;
+  };
+};
 
 export type Scalars = Append<
   {
@@ -14,28 +41,56 @@ export type Scalars = Append<
       id?: true;
       default?: string | 'auto()';
       limit?: number;
+      password?: {
+        saltLength?: number;
+        salt?: string;
+      };
+      email?: string;
+      length?: {
+        min?: number;
+        max?: number;
+        message?: string;
+      };
+      startsWith?: {
+        text: string;
+        message?: string;
+      };
+      endsWith?: {
+        text: string;
+        message?: string;
+      };
+      contains?: {
+        text: string;
+        message?: string;
+      };
+      url?: string;
+      datetime?: string;
+      regex?: {
+        regex: string;
+        message?: string;
+      };
     };
     Int: {
       unique?: true;
       id?: true;
       default?: 'cuid()' | 'autoincrement()' | 'uuid()' | number;
-    };
+    } & NumberValidationModifiers;
     Float: {
       unique?: true;
       default?: number;
-    };
+    } & NumberValidationModifiers;
     BigInt: {
       unique?: true;
       default?: BigInt;
-    };
+    } & NumberValidationModifiers<BigInt>;
     Bytes: {
       unique?: true;
       default?: never;
-    };
+    } & NumberValidationModifiers;
     Decimal: {
       unique?: true;
       default?: number;
-    };
+    } & NumberValidationModifiers;
     Boolean: {
       unique?: true;
       default?: boolean;
@@ -53,20 +108,10 @@ export type Scalars = Append<
     raw?: string;
     array?: true;
     comment?: string;
-    password?: {
-      saltLength?: number;
-      salt?: string;
-    };
     omit?: true;
     'prisma.passthrough': string;
-    allow: {
-      operation: 'all' | ('read' | 'update')[];
-      condition: string;
-    };
-    deny: {
-      operation: 'all' | ('read' | 'update')[];
-      condition: string;
-    };
+    allow: FieldAccessPolicy;
+    deny: FieldAccessPolicy;
   }
 >;
 
@@ -80,6 +125,11 @@ export type Enums = {
 
     // Enum of which this is from
     enum: string;
+
+    omit?: true;
+    'prisma.passthrough': string;
+    allow: FieldAccessPolicy;
+    deny: FieldAccessPolicy;
   };
   // An entry in the enum, e.g. Enum("name", Key("Id", Map("_id")))
   EnumKey: {
@@ -88,10 +138,7 @@ export type Enums = {
   };
 };
 
-export type Reference = [
-  reference: string,
-  scalar?: Types.Fields.Field<'Int'> | Types.Fields.Field<'String'>,
-];
+export type Reference = [reference: string, scalar?: Types.Fields.Field<'Int'> | Types.Fields.Field<'String'>];
 
 export type Relations = Append<
   {
@@ -124,19 +171,15 @@ export type Compounds = Append<
     '@@fulltext': {};
   },
   { values: string[]; comment?: string }
-> &
-  Append<
-    {
-      '@@allow': {};
-      '@@deny': {};
-    },
-    {
-      operation: 'all' | ('create' | 'read' | 'update' | 'delete')[];
-      condition: string;
-    }
-  > & {
-    '@@prisma.passthrough': { text: string };
+> & {
+  '@@allow': ModelAccessPolicy;
+  '@@deny': ModelAccessPolicy;
+  '@@prisma.passthrough': { text: string };
+  '@@validate': {
+    value: string | Types.PolicyExpression;
+    message?: string;
   };
+};
 
 export type TypeData = MergeDbModifiers<Scalars> &
   Compounds &

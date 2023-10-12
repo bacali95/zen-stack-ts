@@ -1,4 +1,5 @@
 export * from './config';
+export * from './expression';
 export * from './modifiers';
 export * from './columns';
 export * from './types';

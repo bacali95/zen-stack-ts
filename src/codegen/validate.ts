@@ -1,7 +1,9 @@
-import { DbModifier } from '../public/db/utils';
 import * as Types from '../types';
+
 import { Config, Provider } from '../types';
-import { isRelation, Relation, isScalar, isDbModifier } from '../types/fields';
+import { Relation, isDbModifier, isRelation, isScalar } from '../types/fields';
+
+import { DbModifier } from '../public/db/utils';
 
 export const validateModel =
   (config: Config) =>

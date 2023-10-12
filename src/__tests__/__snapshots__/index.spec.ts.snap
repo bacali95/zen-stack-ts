@@ -72,17 +72,26 @@ abstract model Abstract {
 
 // This is the User model
 model User extends Abstract {
-	id      Int        @id @default(autoincrement()) @map("_id") @db.Value('foo')
-	email   String     @unique @db.VarChar(4)
-	name    String?
+	id                                       Int        @id @default(autoincrement()) @map("_id") @db.Value('foo')
+	email                                    String     @unique @db.VarChar(4) @email(message: "This should be a valid email")
+	name                                     String?    @length(min: 1, max: 10) @allow("read", auth() != null)
+	name2                                    String     @startsWith(text: "test") @endsWith(text: "test") @contains(text: "test")
+	name3                                    String     @url @datetime @regex(regex: ".*")
 	// The user model
-	height  Float      @default(1.8)
-	role    Role?      @default(USER)
-	foo     Foo
-	bar     Foo?
+	height                                   Float      @default(1.8) @gt(value: 1) @lte(value: 10)
+	// The user model
+	width                                    Float      @default(2.8) @gte(value: 1) @lt(value: 10)
+	role                                     Role?      @default(USER) @deny("all", auth() == null)
+	foo                                      Foo
+	bar                                      Foo?
+	password                                 String     @password(saltLength: 10) @omit
 	// Relations are cool
-	posts   Post[]     @relation("WrittenPosts")
-	pinned  Post?      @relation("PinnedPost")
+	posts                                    Post[]     @relation("WrittenPosts")
+	pinned                                   Post?      @relation("PinnedPost")
+	@@validate(contains(email, "test"))
+	@@allow("all", auth().id != 1)
+	@@deny("all", auth() == null)
+	@@prisma.passthrough("@@index(["id"])")
 }
 
 model Post extends Abstract {

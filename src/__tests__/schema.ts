@@ -1,31 +1,47 @@
 import {
+  AllowField,
   Boolean,
   Compound,
+  Contains,
   DateTime,
+  DateTimeModifier,
   Decimal,
   Default,
+  DenyField,
+  Email,
+  EndsWith,
   Enum,
+  Expression,
   Fields,
   Float,
+  GreaterThan,
+  GreaterThanOrEqual,
   Id,
   Int,
   Key,
+  Length,
   Limit,
+  LowerThan,
+  LowerThanOrEqual,
   ManyToOne,
   Map,
-  Mixin,
   Model,
   Nullable,
+  Omit,
   OnDelete,
   OnUpdate,
   OneToMany,
   OneToOne,
+  Password,
   Raw,
   References,
+  Regex,
+  StartsWith,
   String,
   Unique,
   Unsupported,
   UpdatedAt,
+  Url,
   MySql as db,
 } from '..';
 
@@ -59,14 +75,22 @@ Abstract
 User
   .Extends(Abstract)
   .Field('id',          Int(Id, Default('autoincrement()'), Map('_id'), Raw("@db.Value('foo')")))
-  .Field('email',       String(Unique, db.VarChar(4)))
-  .Field('name',        String(Nullable))
-  .Field('height',      Float(Default(1.80)), "The user model")
-  .Field('role',        Role('USER', Nullable))
+  .Field('email',       String(Unique, db.VarChar(4), Email("This should be a valid email")))
+  .Field('name',        String(Nullable, Length({min: 1, max: 10}), AllowField(["read"], "auth() != null")))
+  .Field('name2',       String(StartsWith({text: 'test'}), EndsWith({text: 'test'}), Contains({text: 'test'})))
+  .Field('name3',       String(Url(), DateTimeModifier(), Regex({regex: '.*'})))
+  .Field('height',      Float(Default(1.80), GreaterThan({value: 1}), LowerThanOrEqual({value: 10})), "The user model")
+  .Field('width',       Float(Default(2.80), GreaterThanOrEqual({value: 1}), LowerThan({value: 10})), "The user model")
+  .Field('role',        Role('USER', Nullable, DenyField("all", "auth() == null")))
   .Field('foo',         Foo()) // no-default non-nullable enum
   .Field('bar',         Foo(Nullable))
+  .Field('password',    String(Password({ saltLength: 10 }), Omit))
   .Relation('posts',    OneToMany(Post, "WrittenPosts"), "Relations are cool")
-  .Relation('pinned',   OneToOne(Post, "PinnedPost", Nullable));
+  .Relation('pinned',   OneToOne(Post, "PinnedPost", Nullable))
+  .Block(Compound.Validate(Expression.Function('contains', Expression.Reference('email'), Expression.Literal('test'))))
+  .Block(Compound.Allow("all", Expression.Binary(Expression.MemberAccess(Expression.Function('auth'), 'id'), '!=', Expression.Literal(1))))
+  .Block(Compound.Deny("all", Expression.Binary(Expression.Function('auth'), '==', Expression.Null)))
+  .Block(Compound.PrismaPassThrough('@@index(["id"])'));
 
 // prettier-ignore
 Post

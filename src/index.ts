@@ -1,3 +1,4 @@
+export * from './public/expressions';
 export * from './public/modifiers';
 export * from './public/model';
 export * from './public/mixin';
@@ -9,16 +10,15 @@ export * as Compound from './public/fields/compounds';
 export * as Types from './types';
 export * from './public/db';
 
-import { writeFile } from 'fs/promises';
 import * as Types from './types';
+
 import codegen from './codegen';
+import { writeFile } from 'fs/promises';
 
 export default (config: Types.Config) => {
   const { schema, output, time } = codegen(config);
 
-  return writeFile(output, schema, 'utf8').then(() =>
-    console.log(`Created schema at: ${output} (${time} ms)`),
-  );
+  return writeFile(output, schema, 'utf8').then(() => console.log(`Created schema at: ${output} (${time} ms)`));
 };
 
 export const generate = (config: Types.Config) => codegen(config).output;

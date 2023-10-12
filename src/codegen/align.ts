@@ -21,7 +21,7 @@ export const alignFields = (value: string): string => {
   const lines = value.split('\n');
 
   const [maximumColumnName, maximumColumnType] = lines
-    .map(l => l.split(' '))
+    .map(l => l.split(/ +/))
     .reduce(
       ([maxName, maxType], [name, type]) => [
         Math.max(maxName, name.length),
@@ -31,20 +31,19 @@ export const alignFields = (value: string): string => {
     );
 
   return lines
-    .map(line => line.split(' '))
-    .map(([columnName, columnType, ...rest]) => {
-      return (
-        [n => n.startsWith('@@'), n => n == '//'].some(fn =>
-          fn(columnName.trim()),
-        )
-          ? [columnName, columnType, ...rest].filter(nonNullable)
-          : [
-              columnName.padEnd(maximumColumnName + 1),
-              columnType ? columnType.padEnd(maximumColumnType + 1) : '',
-              ...rest.map(v => v.trim()),
-            ]
-      ).join(' ');
-    })
+    .map(line => line.split(/ +/))
+    .map(([columnName, columnType, ...rest]) =>
+      ([n => n.startsWith('@@'), n => n == '//'].some(fn =>
+        fn(columnName.trim()),
+      )
+        ? [columnName, columnType, ...rest].filter(nonNullable)
+        : [
+            columnName.padEnd(maximumColumnName + 1),
+            columnType ? columnType.padEnd(maximumColumnType + 1) : '',
+            ...rest.map(v => v.trim()),
+          ]
+      ).join(' '),
+    )
     .map(v => v.trimEnd())
     .join('\n');
 };
