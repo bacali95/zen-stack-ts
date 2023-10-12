@@ -1,10 +1,12 @@
-import { Column } from './columns';
+import * as Types from './types';
+
 import { Modifier, Modifiers } from './modifiers';
 import { Type, TypeData } from './types';
-import { UnionToIntersection } from './utils';
-import * as Types from './types';
-import { Provider } from './config';
+
+import { Column } from './columns';
 import { DbModifier } from '../public/db/utils';
+import { Provider } from './config';
+import { UnionToIntersection } from './utils';
 
 // Column data-type, String, Int etc.
 export type Field<T extends Type, M extends Modifiers<T> = Modifiers<T>> = {

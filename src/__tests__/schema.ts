@@ -15,18 +15,18 @@ import {
   Map,
   Mixin,
   Model,
-  MySql as db,
   Nullable,
   OnDelete,
+  OnUpdate,
   OneToMany,
   OneToOne,
-  OnUpdate,
   Raw,
   References,
   String,
   Unique,
   Unsupported,
   UpdatedAt,
+  MySql as db,
 } from '..';
 
 // roughly from: https://www.prisma.io/docs/concepts/components/prisma-schema#example
@@ -43,18 +43,21 @@ const Role = Enum(
 // without comment
 const Foo = Enum('Foo', Key('Bar'), Key('Baz'));
 
+const Abstract = Model('Abstract');
+
 const Post = Model('Post');
 const User = Model('User', 'This is the User model');
 const Star = Model('Star');
 
-// prettier-ignore
-const Timestamps = Mixin()
+Abstract
+  .Abstract()
   .Field('createdAt', DateTime(Default('now()')))
   .Field('updatedAt', DateTime(UpdatedAt, db.Date(6)))
   .Block(Compound.Index(["mixin", "index"]))
 
 // prettier-ignore
 User
+  .Extends(Abstract)
   .Field('id',          Int(Id, Default('autoincrement()'), Map('_id'), Raw("@db.Value('foo')")))
   .Field('email',       String(Unique, db.VarChar(4)))
   .Field('name',        String(Nullable))
@@ -63,11 +66,11 @@ User
   .Field('foo',         Foo()) // no-default non-nullable enum
   .Field('bar',         Foo(Nullable))
   .Relation('posts',    OneToMany(Post, "WrittenPosts"), "Relations are cool")
-  .Relation('pinned',   OneToOne(Post, "PinnedPost", Nullable))
-  .Mixin(Timestamps);
+  .Relation('pinned',   OneToOne(Post, "PinnedPost", Nullable));
 
 // prettier-ignore
 Post
+  .Extends(Abstract)  
   .Field('id',          Int(Id, Default('autoincrement()'), db.UnsignedSmallInt))
   .Field('published',   Boolean(Default(false) ))
   .Field('title',       String(Limit(255)))
@@ -95,23 +98,22 @@ Post
     ),
   )
   .Relation('stars',    OneToMany(Star))
-  .Mixin(Timestamps)
   .Raw(`@@map("comments")`);
 
 // prettier-ignore
 Star
+  .Extends(Abstract)
   .Field('id',          Int(Id, Default('autoincrement()')))
   .Field('decimal',     Decimal(db.Decimal(10, 20)))
   .Field('postId',      Int(Nullable))
   .Relation('post',     ManyToOne(Post, Fields('postId'), References('id')))
-  .Mixin(Timestamps)
   .Field("location",    Unsupported("polygon", Nullable))
   .Block(Compound.Unique(["A", "B"], Map("_AB_unique")))
   .Block(Compound.Index(["wow"], Map("_B_index")), "Block level comments?")
   .Block(Compound.Map("Group"))
   .Block(Compound.Fulltext(["location", "decimal"]))
 
-export default [Role, User, Post, Star, Foo];
+export default [Abstract, Role, User, Post, Star, Foo];
 
 // let x = OneToOne(Post, 'WrittenPosts', Fields('wow'), References('wee'));
 // let a = OneToOne(Post, Fields('bestPostId'), References('id')); // good

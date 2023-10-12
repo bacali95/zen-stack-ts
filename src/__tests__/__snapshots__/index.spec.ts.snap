@@ -64,47 +64,44 @@ enum Foo {
 
 // models --------------------------------------------------------------------------
 
-// This is the User model
-model User {
-	id               Int        @id @default(autoincrement()) @map("_id") @db.Value('foo')
-	email            String     @unique @db.VarChar(4)
-	name             String?
-	// The user model
-	height           Float      @default(1.8)
-	role             Role?      @default(USER)
-	foo              Foo
-	bar              Foo?
-	// Relations are cool
-	posts            Post[]     @relation("WrittenPosts")
-	pinned           Post?      @relation("PinnedPost")
-	createdAt        DateTime   @default(now())
-	updatedAt        DateTime   @updatedAt @db.Date(6)
+abstract model Abstract {
+	createdAt        DateTime  @default(now())
+	updatedAt        DateTime  @updatedAt @db.Date(6)
 	@@index([mixin, index])
 }
 
-model Post {
-	id                 Int       @id @default(autoincrement()) @db.UnsignedSmallInt
-	published          Boolean   @default(false)
+// This is the User model
+model User extends Abstract {
+	id      Int        @id @default(autoincrement()) @map("_id") @db.Value('foo')
+	email   String     @unique @db.VarChar(4)
+	name    String?
+	// The user model
+	height  Float      @default(1.8)
+	role    Role?      @default(USER)
+	foo     Foo
+	bar     Foo?
+	// Relations are cool
+	posts   Post[]     @relation("WrittenPosts")
+	pinned  Post?      @relation("PinnedPost")
+}
+
+model Post extends Abstract {
+	id                 Int      @id @default(autoincrement()) @db.UnsignedSmallInt
+	published          Boolean  @default(false)
 	title              String
 	authorId           Int?
-	author             User?     @relation("WrittenPosts", fields: [authorId], references: [id], onUpdate: Restrict, onDelete: SetNull)
+	author             User?    @relation("WrittenPosts", fields: [authorId], references: [id], onUpdate: Restrict, onDelete: SetNull)
 	pinnedById         Int?
-	pinnedBy           User?     @relation("PinnedPost", fields: [pinnedById], references: [id])
+	pinnedBy           User?    @relation("PinnedPost", fields: [pinnedById], references: [id])
 	stars              Star[]
-	createdAt          DateTime  @default(now())
-	updatedAt          DateTime  @updatedAt @db.Date(6)
-	@@index([mixin, index])
 	@@map("comments")
 }
 
-model Star {
+model Star extends Abstract {
 	id                     Int                      @id @default(autoincrement())
 	decimal                Decimal                  @db.Decimal(10, 20)
 	postId                 Int?
 	post                   Post                     @relation(fields: [postId], references: [id])
-	createdAt              DateTime                 @default(now())
-	updatedAt              DateTime                 @updatedAt @db.Date(6)
-	@@index([mixin, index])
 	location               Unsupported("polygon")?
 	@@unique([A, B], map: "_AB_unique")
 	// Block level comments?

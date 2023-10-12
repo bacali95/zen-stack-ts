@@ -1,6 +1,8 @@
-import { modifier } from './modifiers';
 import * as Types from '../types';
+
 import { isArray, isString, nonNullable } from '../types/utils';
+
+import { modifier } from './modifiers';
 
 // Converts a Column to a Prisma row string
 export const column = (column: Types.Column): string => {
@@ -57,12 +59,27 @@ const compound = (column: Types.Column<Types.Fields.Compound>) => {
   if (column.type == '@@map')
     return `\t${column.type}(${`"${column.modifiers[0].value}"`})`;
 
-  const map = column.modifiers.find(v => (v.type as 'values' | 'map') == 'map');
-  const args = [
-    `[${(column.modifiers[0].value as string[]).join(', ')}]`,
-    map ? `map: "${map.value}"` : null,
-  ].filter(nonNullable);
+  let args: string[];
+  if (column.type === '@@prisma.passthrough') {
+    args = [`"${column.modifiers[0].value}"`];
+  } else if (['@@allow', '@deny'].includes(column.type)) {
+    const operation = column.modifiers.find(
+      modifier => modifier.type === 'operation',
+    )?.value as string | string[] | undefined;
 
+    args = [
+      `'${Array.isArray(operation) ? operation.join(',') : operation}'`,
+      column.modifiers.find(modifier => modifier.type === 'condition')?.value,
+    ];
+  } else {
+    const map = column.modifiers.find(
+      v => (v.type as 'values' | 'map') == 'map',
+    );
+    args = [
+      `[${(column.modifiers[0].value as string[]).join(', ')}]`,
+      map ? `map: "${map.value}"` : null,
+    ].filter(nonNullable);
+  }
   return `\t${column.type}(${args.join(', ')})`;
 };
 

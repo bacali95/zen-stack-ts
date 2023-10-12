@@ -54,8 +54,6 @@ describe('zen-stack-ts', () => {
   it('should generate the schema', () => {
     const { schema: prisma } = generate(schema);
 
-    console.log(prisma);
-
     expect(replaceGeneratedTime(prisma)).toMatchSnapshot();
   });
 

@@ -44,8 +44,26 @@ export const Array = {
   value: true,
 } as const;
 
+export const Omit = {
+  type: 'Omit',
+  value: true,
+} as const;
+
 export const Raw = (value: string) => ({ type: 'raw' as const, value });
 
 export const Limit = <K extends Types.TypeData['String']['limit']>(
   value: K,
 ): Types.Modifier<'String', 'limit'> => ({ type: 'limit', value });
+
+export const Password = <K extends Types.TypeData['String']['password']>(
+  value: K,
+): Types.Modifier<'String', 'password'> => ({ type: 'password', value });
+
+export const PrismaPassThrough = <
+  K extends Types.TypeData['String']['prisma.passthrough'],
+>(
+  value: K,
+): Types.Modifier<'String', 'prisma.passthrough'> => ({
+  type: 'prisma.passthrough',
+  value,
+});

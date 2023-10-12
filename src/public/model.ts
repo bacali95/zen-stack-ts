@@ -1,4 +1,5 @@
 import * as Types from '../types';
+
 import { isScalar } from '../types/fields';
 
 // Don't really care about the `as unknown` casts too much
@@ -6,6 +7,8 @@ import { isScalar } from '../types/fields';
 
 // Self-referential type
 type Model = {
+  Abstract: () => Model;
+  Extends: (model: Model) => Model;
   Mixin: (...mixins: Types.Mixin[]) => Model;
   Raw: (value: string) => Model;
   Relation: <T extends Types.Fields.Relation>(
@@ -29,7 +32,8 @@ export const Model = (name: string, comment?: string): Model =>
 
 export class $Model implements Types.Blocks.Model, Model {
   name: string;
-  type: 'model' = 'model';
+  type: 'abstract-model' | 'model' = 'model';
+  extends: $Model[] = [];
   columns: Types.Column<Types.Type>[] = [];
 
   constructor(name: string, comment?: string) {
@@ -42,6 +46,18 @@ export class $Model implements Types.Blocks.Model, Model {
         modifiers: [{ type: 'value', value: comment }],
       } as Types.Column<Types.Type>);
     }
+  }
+
+  Abstract() {
+    this.type = 'abstract-model';
+
+    return this;
+  }
+
+  Extends(model: $Model) {
+    this.extends.push(model);
+
+    return this;
   }
 
   Mixin(...mixins: Types.Mixin[]) {

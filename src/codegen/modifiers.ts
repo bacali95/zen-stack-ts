@@ -1,7 +1,8 @@
 import { Properties, transform } from './transform';
+import { Scalars, Type } from '../types/types';
 
 import { Modifier } from '../types/modifiers';
-import { Type } from '../types/types';
+import { nonNullable } from '../types/utils';
 
 // TODO: less shitty way of doing this
 export const modifier = <T extends Type>(
@@ -46,5 +47,29 @@ export const modifier = <T extends Type>(
       return `("${modifier.value}")`;
     case 'raw':
       return modifier.value as unknown as string;
+    case 'omit':
+      return '@omit()';
+    case 'prisma.passthrough':
+      return `@prisma.passthrough("${modifier.value}")`;
+    case 'password':
+      const { saltLength, salt } =
+        modifier.value as Scalars['String']['password'];
+
+      return `@password(${[
+        !!saltLength ? `saltLength: ${saltLength}` : undefined,
+        !!salt ? `salt: "${salt}"` : undefined,
+      ]
+        .filter(nonNullable)
+        .join(', ')})`;
+    case 'allow':
+    case 'deny':
+      const { operation, condition } = modifier.value as Scalars['String'][
+        | 'allow'
+        | 'deny'];
+
+      return `@${modifier.type as string}(${[
+        `'${Array.isArray(operation) ? operation.join(',') : operation}'`,
+        condition,
+      ].join(', ')})`;
   }
 };

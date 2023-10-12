@@ -29,6 +29,7 @@ export default (
 
   const datasource = config.datasource;
   const generators = config.generators;
+  const plugins = config.plugins;
   const enums = schema.filter(Types.Blocks.isEnum);
   const models = schema.filter(Types.Blocks.isModel);
 
@@ -48,6 +49,13 @@ export default (
           ),
         ),
       ),
+      plugins &&
+        group(
+          header('plugins'),
+          plugins.map(plugin =>
+            block(`plugin ${plugin.name}`, alignKv(kv(del(plugin, 'name')))),
+          ),
+        ),
       group(header('enums'), enums.map(enumeration)),
       group(header('models'), models.map(pipe(validateModel(config), model))),
     ]

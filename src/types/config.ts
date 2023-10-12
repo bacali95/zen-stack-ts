@@ -1,5 +1,6 @@
-import path from 'path';
 import { Block } from './blocks';
+import { Plugin } from './plugins';
+import path from 'path';
 
 export type Provider =
   | 'mongodb'
@@ -38,6 +39,7 @@ export type Generator = {
 export type Config = {
   datasource: Datasource;
   generators: Generator[];
+  plugins?: Plugin[];
   output?: string;
   schema: Block[] | Record<string, Block>;
 };
@@ -45,8 +47,8 @@ export type Config = {
 export const validate = (config: Config): Config => {
   if (config.datasource.referentialIntegrity) {
     if (
-      !config.generators.some(g =>
-        g.previewFeatures?.includes('referentialIntegrity'),
+      !config.generators.some(
+        g => g.previewFeatures?.includes('referentialIntegrity'),
       )
     )
       throw new Error(

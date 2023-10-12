@@ -1,15 +1,24 @@
 import * as Types from '../types';
-import { nonNullable } from '../types/utils';
+
 import { alignFields } from './align';
 import { block } from './block';
 import { column } from './column';
+import { nonNullable } from '../types/utils';
 
 export const model = (model: Types.Blocks.Model): string => {
   const [comments, columns] = extractComments(model.columns);
+  const modelType =
+    model.type === 'abstract-model' ? 'abstract model' : 'model';
+  const modelExtends = model.extends.length
+    ? `extends ${model.extends.map(parent => parent.name).join(', ')}`
+    : '';
 
   return [
     comments,
-    block(`model ${model.name}`, alignFields(columns.map(column).join('\n'))),
+    block(
+      `${modelType} ${model.name} ${modelExtends}`.trim(),
+      alignFields(columns.map(column).join('\n')),
+    ),
   ]
     .filter(nonNullable)
     .join('\n')

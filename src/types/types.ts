@@ -1,8 +1,9 @@
-import { Types } from '..';
-import { JsonValue } from '../codegen/lib/json';
-import { Model } from './blocks';
 import { ReferentialAction, Scalar } from './fields';
+
+import { JsonValue } from '../codegen/lib/json';
 import { MergeDbModifiers } from './modifiers';
+import { Model } from './blocks';
+import { Types } from '..';
 
 type Append<T, K> = { [index in keyof T]: T[index] & K };
 
@@ -52,6 +53,20 @@ export type Scalars = Append<
     raw?: string;
     array?: true;
     comment?: string;
+    password?: {
+      saltLength?: number;
+      salt?: string;
+    };
+    omit?: true;
+    'prisma.passthrough': string;
+    allow: {
+      operation: 'all' | ('read' | 'update')[];
+      condition: string;
+    };
+    deny: {
+      operation: 'all' | ('read' | 'update')[];
+      condition: string;
+    };
   }
 >;
 
@@ -101,15 +116,27 @@ export type Relations = Append<
 
 export type Compounds = Append<
   {
-    ['@@id']: {};
-    ['@@unique']: { map: string };
-    ['@@index']: { map: string };
-    ['@@ignore']: {};
-    ['@@map']: {};
-    ['@@fulltext']: {};
+    '@@id': {};
+    '@@unique': { map: string };
+    '@@index': { map: string };
+    '@@ignore': {};
+    '@@map': {};
+    '@@fulltext': {};
   },
   { values: string[]; comment?: string }
->;
+> &
+  Append<
+    {
+      '@@allow': {};
+      '@@deny': {};
+    },
+    {
+      operation: 'all' | ('create' | 'read' | 'update' | 'delete')[];
+      condition: string;
+    }
+  > & {
+    '@@prisma.passthrough': { text: string };
+  };
 
 export type TypeData = MergeDbModifiers<Scalars> &
   Compounds &

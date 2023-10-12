@@ -48,7 +48,3 @@ export const alignFields = (value: string): string => {
     .map(v => v.trimEnd())
     .join('\n');
 };
-
-function pp(columnName: any): any {
-  console.log(JSON.stringify(columnName));
-}
