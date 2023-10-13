@@ -1,6 +1,6 @@
 {
   "name": "zen-stack-ts",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Generate ZenStack from TypeScript",
   "author": "bacali95",
   "license": "GPL-3.0-or-later",
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/bacali95/zen-stack-ts.git"
+    "url": "git+ssh://git@github.com/bacali95/zen-stack-ts.git"
   },
   "keywords": [
     "prisma",
