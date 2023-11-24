@@ -1,5 +1,8 @@
 # Changelog
 
+# [1.1.0]
+- Add boolean expression type.
+
 # [1.0.1]
 - Fix target field type for `@zenstackhq/tanstack-query` plugin definition.
 

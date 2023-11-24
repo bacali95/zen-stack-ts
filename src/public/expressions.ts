@@ -12,11 +12,18 @@ import {
   Type,
   UnaryExpression,
 } from '../types';
-import { FunctionExpression, PolicyBinaryOperator, PolicyExpression, PolicyPredicate } from '../types/expression';
+import {
+  BooleanExpression,
+  FunctionExpression,
+  PolicyBinaryOperator,
+  PolicyExpression,
+  PolicyPredicate,
+} from '../types/expression';
 
 export const Expression = {
   This: { type: 'this' } as NullOrThisExpression,
   Null: { type: 'null' } as NullOrThisExpression,
+  Boolean: (value: BooleanExpression['value']): BooleanExpression => ({ type: 'boolean', value }),
   Function: <Name extends keyof PolicyFunction>(name: Name, ...args: PolicyFunction[Name]): FunctionExpression => ({
     type: 'function',
     name,

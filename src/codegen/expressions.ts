@@ -7,6 +7,8 @@ export const expression = (exp: Types.PolicyExpression) => {
     case 'this':
     case 'null':
       return exp.type;
+    case 'boolean':
+      return exp.value;
     case 'function':
       return `${exp.name}(${exp.args.map(expression).join(', ')})`;
     case 'literal':

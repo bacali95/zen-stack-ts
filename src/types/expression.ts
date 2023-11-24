@@ -22,6 +22,8 @@ export type PolicyFunction = {
 
 export type NullOrThisExpression = { type: 'this' | 'null' };
 
+export type BooleanExpression = { type: 'boolean'; value: 'true' | 'false' };
+
 export type FunctionExpression<Name extends keyof PolicyFunction = keyof PolicyFunction> = {
   type: 'function';
   name: Name;
@@ -61,6 +63,7 @@ export type CollectionPredicateExpression = {
 
 export type PolicyExpression =
   | NullOrThisExpression
+  | BooleanExpression
   | FunctionExpression
   | LiteralExpression
   | ArrayExpression
