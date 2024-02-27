@@ -1,6 +1,6 @@
 {
   "name": "zen-stack-ts",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Generate ZenStack from TypeScript",
   "author": "bacali95",
   "license": "GPL-3.0-or-later",

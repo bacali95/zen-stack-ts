@@ -1,5 +1,8 @@
 # Changelog
 
+# [1.1.1]
+- Fix `startsWith` expression function name.
+
 # [1.1.0]
 - Add boolean expression type.
 

@@ -12,7 +12,7 @@ export type PolicyFunction = {
   url: [ReferenceExpression];
   contains: [ReferenceExpression, PolicyExpression] | [ReferenceExpression, PolicyExpression, PolicyExpression];
   search: [ReferenceExpression, PolicyExpression];
-  startWith: [ReferenceExpression, PolicyExpression];
+  startsWith: [ReferenceExpression, PolicyExpression];
   endsWith: [ReferenceExpression, PolicyExpression];
   has: [ReferenceExpression, PolicyExpression];
   hasEvery: [ReferenceExpression, PolicyExpression];
