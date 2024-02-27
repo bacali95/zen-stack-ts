@@ -11,21 +11,11 @@ export type Datasource = {
   referentialIntegrity?: 'prisma' | 'foreignKeys';
 };
 
-type PreviewFeatures =
-  | 'filterJson'
-  | 'interactiveTransactions'
-  | 'fullTextSearch'
-  | 'referentialIntegrity'
-  | 'dataProxy'
-  | 'extendedIndexes'
-  | 'fullTextIndex'
-  | 'cockroachdb';
-
 export type Generator = {
   name: string;
   provider: string;
   output?: string;
-  previewFeatures?: PreviewFeatures[];
+  previewFeatures?: string[];
   engineType?: 'library' | 'binary';
   binaryTargets?: string[]; // TODO: enum
 };

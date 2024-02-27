@@ -15,6 +15,7 @@ import {
 import {
   BooleanExpression,
   FunctionExpression,
+  ParenthesesExpression,
   PolicyBinaryOperator,
   PolicyExpression,
   PolicyPredicate,
@@ -58,6 +59,10 @@ export const Expression = {
   }),
   Unary: (expression: PolicyExpression): UnaryExpression => ({
     type: 'unary',
+    expression,
+  }),
+  Parentheses: (expression: PolicyExpression): ParenthesesExpression => ({
+    type: 'parentheses',
     expression,
   }),
   CollectionPredicate: (

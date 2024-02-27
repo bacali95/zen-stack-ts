@@ -6,12 +6,11 @@ export type PolicyFunction = {
   auth: [];
   future: [];
   length: [ReferenceExpression, PolicyExpression] | [ReferenceExpression, PolicyExpression, PolicyExpression];
-  regex: [ReferenceExpression];
+  regex: [ReferenceExpression, PolicyExpression];
   email: [ReferenceExpression];
   datetime: [ReferenceExpression];
   url: [ReferenceExpression];
   contains: [ReferenceExpression, PolicyExpression] | [ReferenceExpression, PolicyExpression, PolicyExpression];
-  search: [ReferenceExpression, PolicyExpression];
   startsWith: [ReferenceExpression, PolicyExpression];
   endsWith: [ReferenceExpression, PolicyExpression];
   has: [ReferenceExpression, PolicyExpression];
@@ -54,6 +53,10 @@ export type BinaryExpression = {
 
 export type UnaryExpression = { type: 'unary'; expression: PolicyExpression };
 
+export type ParenthesesExpression = {
+  type: 'parentheses';
+  expression: PolicyExpression;
+};
 export type CollectionPredicateExpression = {
   type: 'collection-predicate';
   expression: PolicyExpression;
@@ -69,6 +72,7 @@ export type PolicyExpression =
   | ArrayExpression
   | ReferenceExpression
   | MemberAccessExpression
+  | ParenthesesExpression
   | BinaryExpression
   | UnaryExpression
   | CollectionPredicateExpression;

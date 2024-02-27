@@ -1,7 +1,5 @@
 import * as Types from '../types';
 
-import { modifier } from './modifiers';
-
 export const expression = (exp: Types.PolicyExpression) => {
   switch (exp.type) {
     case 'this':
@@ -22,7 +20,9 @@ export const expression = (exp: Types.PolicyExpression) => {
     case 'binary':
       return `${expression(exp.leftOperand)} ${exp.operator} ${expression(exp.rightOperand)}`;
     case 'unary':
-      return `-${expression(exp.expression)}`;
+      return `!${expression(exp.expression)}`;
+    case 'parentheses':
+      return `(${expression(exp.expression)})`;
     case 'collection-predicate':
       return `${expression(exp.expression)}${exp.predicate}[${expression(exp.childExpression)}]`;
     default:
