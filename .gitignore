@@ -3,3 +3,4 @@ node_modules
 dist
 hidden
 schema.prisma
+.yarn/install-state.gz

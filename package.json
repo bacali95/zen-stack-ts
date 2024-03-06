@@ -1,6 +1,6 @@
 {
   "name": "zen-stack-ts",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "description": "Generate ZenStack from TypeScript",
   "author": "bacali95",
   "license": "GPL-3.0-or-later",
@@ -30,7 +30,6 @@
     "access": "public"
   },
   "homepage": "https://github.com/bacali95/zen-stack-ts#readme",
-  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^29.5.5",
     "@types/node": "^18.16.17",

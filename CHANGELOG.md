@@ -1,5 +1,8 @@
 # Changelog
 
+# [1.4.0]
+- Add `directUrl` config prop to data source section.
+
 # [1.3.1]
 - Add parenthases expression.
 - Fix unary expression.

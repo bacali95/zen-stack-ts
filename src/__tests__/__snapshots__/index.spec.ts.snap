@@ -33,6 +33,7 @@ exports[`zen-stack-ts should generate the schema 1`] = `
 
 datasource db {
 	url                   = env("DATABASE_URL")
+	directUrl             = env("DATABASE_DIRECT_URL")
 	provider              = "mysql"
 	shadowDatabaseUrl     = env("DATABASE_SHADOW_URL")
 	referentialIntegrity  = "prisma"

@@ -7,6 +7,7 @@ export type Provider = 'mongodb' | 'postgresql' | 'mysql' | 'sqlite' | 'sqlserve
 export type Datasource = {
   provider: Provider;
   url: string;
+  directUrl?: string;
   shadowDatabaseUrl?: string;
   referentialIntegrity?: 'prisma' | 'foreignKeys';
 };

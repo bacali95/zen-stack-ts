@@ -27,6 +27,7 @@ const generate = (schema: Types.Config['schema'], overrides: Partial<Types.Confi
     schema,
     datasource: {
       url: 'env("DATABASE_URL")',
+      directUrl: 'env("DATABASE_DIRECT_URL")',
       provider: 'mysql',
       shadowDatabaseUrl: 'env("DATABASE_SHADOW_URL")',
       referentialIntegrity: 'prisma',
