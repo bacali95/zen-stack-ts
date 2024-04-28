@@ -1,5 +1,8 @@
 # Changelog
 
+# [1.4.2]
+- Fix enum field codegen.
+
 # [1.4.1]
 - Allow array modifier in enum fields.
 
