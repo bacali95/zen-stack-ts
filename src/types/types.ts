@@ -121,6 +121,7 @@ export type Enums = {
     nullable?: boolean;
     default?: string;
     ignore?: true;
+    array?: true;
     comment?: string;
 
     // Enum of which this is from
