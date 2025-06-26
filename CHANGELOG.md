@@ -1,5 +1,8 @@
 # Changelog
 
+# [1.5.0]
+- Add `prisma-client` generator options.
+
 # [1.4.2]
 - Fix enum field codegen.
 

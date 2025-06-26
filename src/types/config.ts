@@ -19,6 +19,10 @@ export type Generator = {
   previewFeatures?: string[];
   engineType?: 'library' | 'binary';
   binaryTargets?: string[]; // TODO: enum
+  runtime?: 'nodejs' | 'node' | 'deno' | 'bun' | 'deno-deploy' | 'workerd' |'cloudflare' | 'edge-light' |'vercel' | 'react-native';
+  moduleFormat?: 'esm' | 'cjs';
+  generatedFileExtension?: 'ts' | 'mts' | 'cts';
+  importFileExtension?: 'ts' | 'mts' | 'cts'| 'js' | 'mjs' | 'cjs'
 };
 
 export type Config = {
