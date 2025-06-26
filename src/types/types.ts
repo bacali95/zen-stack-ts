@@ -39,7 +39,7 @@ export type Scalars = Append<
     String: {
       unique?: true;
       id?: true;
-      default?: string | 'auto()';
+      default?: string | 'auto()' | `auth().${string}`;
       limit?: number;
       password?: {
         saltLength?: number;
@@ -73,7 +73,7 @@ export type Scalars = Append<
     Int: {
       unique?: true;
       id?: true;
-      default?: 'cuid()' | 'autoincrement()' | 'uuid()' | number;
+      default?: 'cuid()' | 'autoincrement()' | 'uuid()' | number | `auth().${string}`;
     } & NumberValidationModifiers;
     Float: {
       unique?: true;

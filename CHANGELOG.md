@@ -1,5 +1,8 @@
 # Changelog
 
+# [1.5.1]
+- Fix `default` modifier for `auth()` function.
+
 # [1.5.0]
 - Add `prisma-client` generator options.
 

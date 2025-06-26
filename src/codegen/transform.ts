@@ -19,7 +19,7 @@ export const transform = (value: Properties[string]): string => {
   switch (typeof value) {
     case 'string': {
       // Test if it matches a function call
-      if (/^.*\(.*\)$/.test(value)) return value;
+      if (/.*\(.*\)/.test(value)) return value;
 
       return `"${value}"`;
     }
