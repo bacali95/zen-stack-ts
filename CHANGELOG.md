@@ -1,5 +1,8 @@
 # Changelog
 
+# [1.6.0]
+- Add `client` type to `engineType` generator option.
+
 # [1.5.1]
 - Fix `default` modifier for `auth()` function.
 

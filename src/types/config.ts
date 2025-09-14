@@ -17,7 +17,7 @@ export type Generator = {
   provider: string;
   output?: string;
   previewFeatures?: string[];
-  engineType?: 'library' | 'binary';
+  engineType?: 'client' | 'library' | 'binary';
   binaryTargets?: string[]; // TODO: enum
   runtime?: 'nodejs' | 'node' | 'deno' | 'bun' | 'deno-deploy' | 'workerd' |'cloudflare' | 'edge-light' |'vercel' | 'react-native';
   moduleFormat?: 'esm' | 'cjs';

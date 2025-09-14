@@ -1,10 +1,10 @@
 {
   "name": "zen-stack-ts",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Generate ZenStack from TypeScript",
   "author": "bacali95",
   "license": "GPL-3.0-or-later",
-  "packageManager": "yarn@4.9.2",
+  "packageManager": "yarn@4.9.4",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -41,7 +41,7 @@
     "typescript": "^5.8.3"
   },
   "volta": {
-    "node": "22.17.0",
-    "yarn": "4.9.2"
+    "node": "24.8.0",
+    "yarn": "4.9.4"
   }
 }
